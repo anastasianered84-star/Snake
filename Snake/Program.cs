@@ -47,6 +47,37 @@ namespace Snake
             }
         }
 
+        public static void Receiver()
+        {
+            UdpClient receivingUdpClient = new UdpClient(localPort);
+            IPEndPoint RemoteIpEndPoint = null;
+
+            try
+            {
+                Console.WriteLine("Команды сервера:");
+
+                while (true)
+                {
+                    byte[] receiveBytes = receivingUdpClient.Receive(
+                        ref RemoteIpEndPoint);
+
+                    string returnData = Encoding.UTF8.GetString(receiveBytes);
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Получил команду: " + returnData.ToString());
+
+                    if (returnData.ToString().Contains("/start"))
+                    {
+                        string[] dataMessage = returnData.ToString().Split('|');
+                        ViewModelUserSettings viewModelUserSettings = JsonConvert.DeserializeObject<ViewModelUserSettings>(dataMessage[1]);
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($)
+                    }
+                }
+            }
+        }
+
 
 
         static void Main(string[] args)
