@@ -72,10 +72,68 @@ namespace Snake
                         ViewModelUserSettings viewModelUserSettings = JsonConvert.DeserializeObject<ViewModelUserSettings>(dataMessage[1]);
 
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($)
+                        Console.WriteLine($"Подключился пользователь: {viewModelUserSettings.IPAddress} : {viewModelUserSettings.Port}");
+                        remoteIPAddress.Add(viewModelUserSettings);
+                        viewModelUserSettings.IdSnake = AddSnake();
+                        viewModelGames[viewModelUserSettings.IdSnake].IdSnake = viewModelUserSettings.IdSnake;
+
                     }
+                    else
+                    {
+                        string[] dataMessage = returnData.ToString().Split('|');
+                        ViewModelUserSettings viewModelUserSettings = JsonConvert.DeserializeObject<ViewModelUserSettings>(dataMessage[1]);
+                        int IdPlayer = -1;
+                        IdPlayer = remoteIPAddress.FindIndex(x => x.IPAddress == viewModelUserSettings.IPAddress)
+                            && x.Port == viewModelUserSettings.Port);
+
+                        if(IdPlayer !=  -1)
+                        {
+                            if (dataMessage[0] == "Up" &&
+                                viewModelGames[IdPlayer].SnakesPlayers.direction != Snakes.Direction.Down)
+                                viewModelGames[IdPlayer].SnakesPlayers.direction = Snakes.Direction.Up;
+
+                            else if (dataMessage[0] == "Down" &&
+                                viewModelGames[IdPlayer].SnakesPlayers.direction != Snakes.Direction.Up)
+                                viewModelGames[IdPlayer].SnakesPlayers.direction = Snakes.Direction.Down;
+
+                            else if (dataMessage[0] == "Left" &&
+                                viewModelGames[IdPlayer].SnakesPlayers.direction != Snakes.Direction.Right)
+                                viewModelGames[IdPlayer].SnakesPlayers.direction = Snakes.Direction.Left;
+
+                            else if (dataMessage[0] == "Right" &&
+                                viewModelGames[IdPlayer].SnakesPlayers.direction != Snakes.Direction.Left)
+                                viewModelGames[IdPlayer].SnakesPlayers.direction = Snakes.Direction.Right;
+
+                        }
+
+                    }
+                    
                 }
             }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static int AddSnake()
+        {
+            ViewModelGames viewModelGamesPlayer = new ViewModelGames();
+
+            viewModelGamesPlayer.SnakesPlayers = new Snakes()
+            {
+                Points = new List<Snakes.Point>()
+                {
+                    new Snakes.Point() { X = 30, Y = 10 },
+                    new Snakes.Point() { X = 20, Y = 10 },
+                    new Snakes.Point() { X = 10, Y = 10 },
+                },
+                direction = Snakes.Direction.Start
+            };
+            viewModelGamesPlayer.Points = new Snakes.Point(new Random().Next(10, 783), new Random().Next(10, 410));
+            viewModelGames.Add(viewModelGamesPlayer);
+            return viewModelGames.FindIndex(x => x == viewModelGamesPlayer);
         }
 
 
