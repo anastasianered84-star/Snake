@@ -157,7 +157,10 @@ namespace Snake
                     viewModelGames.RemoveAll(x => x.SnakesPlayers.GameOver);
 
                 }
-
+                foreach (ViewModelUserSettings User in remoteIPAddress)
+                {
+                    Snakes Snake
+                }
             }
         }
 
