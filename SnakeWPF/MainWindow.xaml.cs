@@ -31,7 +31,9 @@ namespace SnakeWPF
         public MainWindow()
         {
             InitializeComponent();
-           
+            mainWindow = this;
+            OpenPage(Home);
+
         }
         public void StartReceiver()
         {
@@ -54,6 +56,47 @@ namespace SnakeWPF
                 frame.BeginAnimation(OpacityProperty, endAnimation);
             };
             frame.BeginAnimation(OpacityProperty, startAnimation);
+        }
+        public void Receiver()
+        {
+            receivingUdpClient = new UdpClient(int.Parse(ViewModelUserSettings.Port));
+            IPEndPoint RemoteIpEndPoint = null;
+            try
+            {
+                while (true)
+                {
+                    byte[] receiveBytes = receivingUdpClient.Receive(ref RemoteIpEndPoint);
+                    string returnData = Encoding.UTF8.GetString(receiveBytes);
+
+                    if (ViewModelGames == null)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            OpenPage(Game);
+                        });
+                    }
+
+                    var gameData = JsonConvert.DeserializeObject<GameData>(returnData);
+                    ViewModelGames = gameData.PlayerData;
+                    AllViewModelGames = gameData.OtherPlayersData;
+
+                    if (ViewModelGames.SnakesPlayers.GameOver)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            OpenPage(new Pages.EndGame());
+                        });
+                    }
+                    else
+                    {
+                        Game.CreateUI();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Возникло исключенеие: " + ex.ToString() + "\n " + ex.Message);
+            }
         }
     }
 }
