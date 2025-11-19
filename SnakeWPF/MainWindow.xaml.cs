@@ -35,13 +35,13 @@ namespace SnakeWPF
             InitializeComponent();
             mainWindow = this;
             OpenPage(Home);
-
         }
         public void StartReceiver()
         {
             tRec = new Thread(new ThreadStart(Receiver));
             tRec.Start();
         }
+
         public void OpenPage(Page page)
         {
             DoubleAnimation startAnimation = new DoubleAnimation();
@@ -59,6 +59,7 @@ namespace SnakeWPF
             };
             frame.BeginAnimation(OpacityProperty, startAnimation);
         }
+
         public void Receiver()
         {
             receivingUdpClient = new UdpClient(int.Parse(ViewModelUserSettings.Port));
@@ -118,6 +119,7 @@ namespace SnakeWPF
                 sender.Close();
             }
         }
+
         private void EventKeyUp(object sender, KeyEventArgs e)
         {
             if (!string.IsNullOrEmpty(ViewModelUserSettings.IPAddress) && !string.IsNullOrEmpty(ViewModelUserSettings.Port) && (ViewModelGames != null && !ViewModelGames.SnakesPlayers.GameOver))
@@ -132,6 +134,7 @@ namespace SnakeWPF
                     Send($"Right|{JsonConvert.SerializeObject(ViewModelUserSettings)}");
             }
         }
+
         private void QuitApplication(object sender, System.ComponentModel.CancelEventArgs e)
         {
             receivingUdpClient.Close();

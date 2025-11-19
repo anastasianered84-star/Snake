@@ -56,4 +56,3 @@ namespace SnakeWPF.Pages
         }
     }
 }
-
