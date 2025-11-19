@@ -222,36 +222,30 @@ namespace Snake
                     if (Snake.Points[0].X >= viewModelGames.Find(x => x.IdSnake == User.IdSnake).Points.X - 15 &&
     Snake.Points[0].X <= viewModelGames.Find(x => x.IdSnake == User.IdSnake).Points.X + 15)
                     {
-                        // Проверяем что если первая точка змеи игрока находится в координатах яблока по вертикали
+
                         if (Snake.Points[0].Y >= viewModelGames.Find(x => x.IdSnake == User.IdSnake).Points.Y - 15 &&
                             Snake.Points[0].Y <= viewModelGames.Find(x => x.IdSnake == User.IdSnake).Points.Y + 15)
                         {
-                            // создаём новое яблоко
                             viewModelGames.Find(x => x.IdSnake == User.IdSnake).Points = new Snakes.Point(
                                 new Random().Next(10, 783),
                                 new Random().Next(10, 410));
 
-                            // Добавляем змее новую точку на координатах последней
                             Snake.Points.Add(new Snakes.Point()
                             {
                                 X = Snake.Points[Snake.Points.Count - 1].X,
                                 Y = Snake.Points[Snake.Points.Count - 1].Y
                             });
 
-                            // загружаем таблицу
+
                             LoadLeaders();
 
-                            // добавляем нас в таблицу
                             Leaders.Add(new Leaders()
                             {
                                 Name = User.Name,
                                 Points = Snake.Points.Count - 3
                             });
 
-                            // сортируем таблицу по двум значениям сначала по кол-ву точек затем по наименованию
                             Leaders = Leaders.OrderByDescending(x => x.Points).ThenBy(x => x.Name).ToList();
-
-                            // Ищем себя в списке и записываем в модель змеи
                             viewModelGames.Find(x => x.IdSnake == User.IdSnake).Top =
                                 Leaders.FindIndex(x => x.Points == Snake.Points.Count - 3 && x.Name == User.Name) + 1;
                         }
