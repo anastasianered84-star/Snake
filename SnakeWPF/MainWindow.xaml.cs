@@ -132,6 +132,11 @@ namespace SnakeWPF
                     Send($"Right|{JsonConvert.SerializeObject(ViewModelUserSettings)}");
             }
         }
+        private void QuitApplication(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            receivingUdpClient.Close();
+            tRec.Abort();
+        }
 
     }
 }
