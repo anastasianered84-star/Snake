@@ -120,6 +120,11 @@
     <Resource Include="Image\background_2.png" />
     <Resource Include="Image\background_3.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{edec9082-f5cb-470a-9c4b-4b5864d6ac7e}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
