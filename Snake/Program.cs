@@ -32,6 +32,18 @@ namespace Snake
                 {
                     var playerData = viewModelGames.Find(x => x.IdSnake == User.IdSnake);
                     var otherPlayersData = viewModelGames.FindAll(x => x.IdSnake != User.IdSnake);
+
+                    // Добавляем имена игроков
+                    if (playerData != null)
+                        playerData.PlayerName = User.Name;
+
+                    foreach (var otherPlayer in otherPlayersData)
+                    {
+                        var userInfo = remoteIPAddress.Find(x => x.IdSnake == otherPlayer.IdSnake);
+                        if (userInfo != null)
+                            otherPlayer.PlayerName = userInfo.Name;
+                    }
+
                     var gameData = new GameData
                     {
                         PlayerData = playerData,

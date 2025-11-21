@@ -14,5 +14,7 @@ namespace Common
         public int Top = 0;
 
         public int IdSnake {  get; set; }
+
+        public string PlayerName { get; set; }
     }
 }
